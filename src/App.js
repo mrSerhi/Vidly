@@ -1,25 +1,83 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import "./App.css";
+// fake API
+import { getMovies, deleteMovie } from "./services/fakeMovieService";
+
+// components
+import Spinner from "./components/layout/spinner/spinner";
+import TableMovies from "./components/tableMovies/tableMovies";
+import TitleMovies from "./components/titleMovies/titleMovies";
+import Pagination from "./components/layout/pagination/pagination";
 
 class App extends Component {
+  state = {
+    movies: [],
+    loaded: false,
+    contentPerPage: 9
+  };
+
+  componentDidMount() {
+    localStorage.setItem("movies", JSON.stringify(getMovies()));
+    setTimeout(() => {
+      this.setState({
+        movies: JSON.parse(localStorage.getItem("movies")),
+        loaded: true
+      });
+    }, 1000);
+    // this.setState({ movies: getMovies(), loaded: true });
+  }
+
+  componentDidUpdate() {
+    const { movies } = this.state;
+    localStorage.setItem("movies", JSON.stringify(movies));
+  }
+
+  handleDeleteClick = id => {
+    const movies = [...this.state.movies];
+    const filter = movies.filter(m => m._id !== id);
+    this.setState({ movies: filter });
+    deleteMovie(id);
+  };
+
+  handleLikedToggle = id => {
+    this.setState(state => {
+      const shallCopy = [...state.movies];
+      const index = shallCopy.findIndex(m => m._id === id);
+      shallCopy[index] = { ...shallCopy[index] };
+      shallCopy[index].liked = !shallCopy[index].liked;
+
+      return { movies: shallCopy };
+    });
+    const dataAPI = getMovies();
+    dataAPI.forEach(item => {
+      if (item._id === id) item.liked = !item.liked;
+    });
+  };
+
+  displayTable = () => {
+    const { movies, loaded, contentPerPage } = this.state;
+    const length = movies.length;
+
+    if (loaded) {
+      return (
+        <React.Fragment>
+          <TitleMovies length={movies.length} />
+          <TableMovies
+            data={movies}
+            onDeleted={this.handleDeleteClick}
+            onLiked={this.handleLikedToggle}
+          />
+          <Pagination itemsLength={length} itemsPerPage={contentPerPage} />
+        </React.Fragment>
+      );
+    }
+    return <Spinner />;
+  };
+
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="container">
+        <div className="row">{this.displayTable()}</div>
       </div>
     );
   }
