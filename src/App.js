@@ -13,7 +13,8 @@ class App extends Component {
   state = {
     movies: [],
     loaded: false,
-    contentPerPage: 9
+    contentPerPage: 4,
+    currentPage: 1
   };
 
   componentDidMount() {
@@ -54,9 +55,14 @@ class App extends Component {
     });
   };
 
+  handlePaginationClick = (e, page) => {
+    e.preventDefault();
+    this.setState({ currentPage: page });
+  };
+
   displayTable = () => {
-    const { movies, loaded, contentPerPage } = this.state;
-    const length = movies.length;
+    const { movies, loaded, contentPerPage, currentPage } = this.state;
+    const { length } = movies;
 
     if (loaded) {
       return (
@@ -67,7 +73,12 @@ class App extends Component {
             onDeleted={this.handleDeleteClick}
             onLiked={this.handleLikedToggle}
           />
-          <Pagination itemsLength={length} itemsPerPage={contentPerPage} />
+          <Pagination
+            itemsLength={length}
+            itemsPerPage={contentPerPage}
+            currentPage={currentPage}
+            onChangePagination={this.handlePaginationClick}
+          />
         </React.Fragment>
       );
     }

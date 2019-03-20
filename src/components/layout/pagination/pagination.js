@@ -2,7 +2,12 @@ import React from "react";
 import PropTypes from "prop-types";
 import uuid from "uuid";
 
-const Pagination = ({ itemsLength, itemsPerPage }) => {
+const Pagination = ({
+  itemsLength,
+  itemsPerPage,
+  currentPage,
+  onChangePagination
+}) => {
   const createPagination = (itemsLength, itemsPerPage) => {
     const numOfPages = Math.ceil(itemsLength / itemsPerPage);
     if (numOfPages === 1) return null; // hide pagination if result is a one page
@@ -15,12 +20,18 @@ const Pagination = ({ itemsLength, itemsPerPage }) => {
 
   const paginationItems = () => {
     const pagination = createPagination(itemsLength, itemsPerPage);
+
     if (pagination !== null) {
-      pagination.map(item => {
+      return pagination.map(page => {
+        const active = currentPage === page ? "page-item active" : "page-item";
         return (
-          <li key={uuid()} className="page-item">
-            <a className="page-link" href="#!">
-              {item}
+          <li key={uuid()} className={active}>
+            <a
+              onClick={e => onChangePagination(e, page)}
+              className="page-link"
+              href="#!"
+            >
+              {page}
             </a>
           </li>
         );
@@ -28,6 +39,7 @@ const Pagination = ({ itemsLength, itemsPerPage }) => {
     }
     return null;
   };
+
   return (
     <div className="col-md-12 d-flex justify-content-center">
       <ul className="pagination">{paginationItems()}</ul>
