@@ -49,7 +49,9 @@ const Pagination = ({
 
 Pagination.propTypes = {
   itemsLength: PropTypes.number.isRequired,
-  itemsPerPage: PropTypes.number.isRequired
+  itemsPerPage: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  onChangePagination: PropTypes.func.isRequired
 };
 
 export default Pagination;

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "./App.css";
 // fake API
 import { getMovies, deleteMovie } from "./services/fakeMovieService";
+// utils for create pagination
+import { createPagination } from "./utils/forPagination";
 
 // components
 import Spinner from "./components/layout/spinner/spinner";
@@ -61,13 +63,14 @@ class App extends Component {
   };
 
   displayTable = () => {
-    const { movies, loaded, contentPerPage, currentPage } = this.state;
-    const { length } = movies;
+    const { movies: content, loaded, contentPerPage, currentPage } = this.state;
+    const { length } = content;
+    const movies = createPagination(content, currentPage, contentPerPage);
 
     if (loaded) {
       return (
         <React.Fragment>
-          <TitleMovies length={movies.length} />
+          <TitleMovies length={length} />
           <TableMovies
             data={movies}
             onDeleted={this.handleDeleteClick}
