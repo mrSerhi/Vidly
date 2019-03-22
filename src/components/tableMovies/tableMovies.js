@@ -3,7 +3,7 @@ import React from "react";
 // components
 import Like from "../layout/like/like";
 
-const TableMovies = ({ data, onDeleted, onLiked }) => {
+const TableMovies = ({ data, onDeleted, onLiked, onSorting }) => {
   const tr = data.map(movie => {
     const {
       _id,
@@ -41,10 +41,41 @@ const TableMovies = ({ data, onDeleted, onLiked }) => {
         <table className="table table-striped">
           <thead className="thead thead-dark ">
             <tr>
-              <th>Title</th>
-              <th>Genre</th>
-              <th>Stock</th>
-              <th>Rate</th>
+              <th>
+                <button
+                  onClick={() => onSorting("title")}
+                  className="btn btn-link text-light"
+                >
+                  Title <i className="fas fa-sort-down" />
+                </button>
+              </th>
+
+              <th>
+                <button
+                  onClick={() => onSorting("genre.name")}
+                  className="btn btn-link text-light px-0"
+                >
+                  Genre <i className="fas fa-sort-down" />
+                </button>
+              </th>
+
+              <th>
+                <button
+                  onClick={() => onSorting("numberInStock")}
+                  className="btn btn-link text-light px-0"
+                >
+                  Stock <i className="fas fa-sort-down" />
+                </button>
+              </th>
+
+              <th>
+                <button
+                  onClick={() => onSorting("dailyRentalRate")}
+                  className="btn btn-link text-light px-0"
+                >
+                  Rate <i className="fas fa-sort-down" />
+                </button>
+              </th>
               <th />
               <th />
             </tr>

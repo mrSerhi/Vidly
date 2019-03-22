@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import uuid from "uuid";
+import _ from "lodash";
 // fake API
 import { getMovies, deleteMovie } from "./services/fakeMovieService";
 import { getGenres } from "./services/fakeGenreService";
@@ -73,6 +74,8 @@ class App extends Component {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
 
+  handleSortingData = path => {};
+
   displayMoviesOnGenres = () => {
     const { selectedGenre: genre, movies } = this.state;
 
@@ -88,7 +91,8 @@ class App extends Component {
       loaded,
       contentPerPage,
       currentPage,
-      genres
+      genres,
+      selectedGenre
     } = this.state;
     // const { length } = content;
 
@@ -100,12 +104,17 @@ class App extends Component {
         <React.Fragment>
           <TitleMovies length={moviesOnGenre.length} />
 
-          <Sidebar genres={genres} onGenreDisplay={this.handleGenresSelect} />
+          <Sidebar
+            genres={genres}
+            selectedItem={selectedGenre}
+            onGenreDisplay={this.handleGenresSelect}
+          />
 
           <TableMovies
             data={movies}
             onDeleted={this.handleDeleteClick}
             onLiked={this.handleLikedToggle}
+            onSorting={this.handleSortingData}
           />
 
           <Pagination

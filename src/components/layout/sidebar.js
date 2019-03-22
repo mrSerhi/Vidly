@@ -1,11 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Sidebar = ({ genres, onGenreDisplay }) => {
+const Sidebar = ({ genres, selectedItem, onGenreDisplay }) => {
   const renderGenres = genres.map(g => {
-    const { _id: id, name: genre, active = false } = g;
+    const { _id: id, name: genre } = g;
     const itemClasses = "list-group-item list-group-item-action ";
-    const hightlight = active ? itemClasses + "active" : itemClasses;
+    const hightlight =
+      selectedItem === genre ? itemClasses + "active" : itemClasses;
     return (
       <a
         onClick={e => onGenreDisplay(e, genre)}
