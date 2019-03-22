@@ -22,7 +22,8 @@ class App extends Component {
     contentPerPage: 4,
     currentPage: 1,
     genres: [],
-    selectedGenre: "AllGenres"
+    selectedGenre: "AllGenres",
+    ordered: { path: "title", order: "asc" }
   };
 
   componentDidMount() {
@@ -74,9 +75,11 @@ class App extends Component {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
 
-  handleSortingData = path => {};
+  handleSortingData = path => {
+    this.setState({ ordered: { path, order: "asc" } });
+  };
 
-  displayMoviesOnGenres = () => {
+  filteringMoviesOnGenres = () => {
     const { selectedGenre: genre, movies } = this.state;
 
     if (genre !== "AllGenres") {
@@ -87,17 +90,24 @@ class App extends Component {
 
   displayTable = () => {
     const {
-      // movies: content,
       loaded,
       contentPerPage,
       currentPage,
       genres,
-      selectedGenre
+      selectedGenre,
+      ordered: { path, order }
     } = this.state;
-    // const { length } = content;
 
-    const moviesOnGenre = this.displayMoviesOnGenres();
-    const movies = createPagination(moviesOnGenre, currentPage, contentPerPage);
+    // filtering by genre
+    const moviesOnGenre = this.filteringMoviesOnGenres();
+    // sorting by order
+    const sortingMoviesByOrder = _.orderBy(moviesOnGenre, [path], [order]);
+    // pagination
+    const movies = createPagination(
+      sortingMoviesByOrder,
+      currentPage,
+      contentPerPage
+    );
 
     if (loaded) {
       return (
