@@ -75,17 +75,7 @@ class App extends Component {
     this.setState({ selectedGenre: genre, currentPage: 1 });
   };
 
-  handleSortingData = path => {
-    // 1. clone ordered state obj
-    const ordered = { ...this.state.ordered };
-    // 2. Check if path equal ordered.path for reverse sorting and change on 'desc'
-    if (ordered.path === path) {
-      ordered.order = "desc";
-    } else {
-      ordered.path = path;
-      ordered.order = "asc";
-    }
-
+  handleSortingData = ordered => {
     this.setState({ ordered });
   };
 
@@ -98,7 +88,7 @@ class App extends Component {
     return movies;
   };
 
-  displayTable = () => {
+  renderContent = () => {
     const {
       loaded,
       contentPerPage,
@@ -132,6 +122,7 @@ class App extends Component {
 
           <TableMovies
             data={movies}
+            orderedItems={this.state.ordered}
             onDeleted={this.handleDeleteClick}
             onLiked={this.handleLikedToggle}
             onSorting={this.handleSortingData}
@@ -152,7 +143,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <div className="row">{this.displayTable()}</div>
+        <div className="row">{this.renderContent()}</div>
       </div>
     );
   }

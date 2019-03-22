@@ -3,8 +3,21 @@ import React from "react";
 // components
 import Like from "../layout/like/like";
 
-const TableMovies = ({ data, onDeleted, onLiked, onSorting }) => {
-  const tr = data.map(movie => {
+const TableMovies = ({ data, orderedItems, onDeleted, onLiked, onSorting }) => {
+  const sorting = path => {
+    // 1. clone ordered state obj from props
+    const ordered = { ...orderedItems };
+    // 2. Check if path equal ordered.path for reverse sorting and change on 'desc' or set previous
+    if (ordered.path === path) {
+      ordered.order = ordered.order === "asc" ? "desc" : "asc";
+    } else {
+      ordered.path = path;
+      ordered.order = "asc";
+    }
+    onSorting(ordered); // return ordered object
+  };
+
+  const RenderColumns = data.map(movie => {
     const {
       _id,
       title,
@@ -38,12 +51,12 @@ const TableMovies = ({ data, onDeleted, onLiked, onSorting }) => {
   return (
     <div className="col-md-10 mx-auto">
       {data.length !== 0 && (
-        <table className="table table-striped">
+        <table className="table table-responsive-sm table-striped">
           <thead className="thead thead-dark ">
             <tr>
               <th>
                 <button
-                  onClick={() => onSorting("title")}
+                  onClick={() => sorting("title")}
                   className="btn btn-link text-light"
                 >
                   Title <i className="fas fa-sort-down" />
@@ -52,7 +65,7 @@ const TableMovies = ({ data, onDeleted, onLiked, onSorting }) => {
 
               <th>
                 <button
-                  onClick={() => onSorting("genre.name")}
+                  onClick={() => sorting("genre.name")}
                   className="btn btn-link text-light px-0"
                 >
                   Genre <i className="fas fa-sort-down" />
@@ -61,7 +74,7 @@ const TableMovies = ({ data, onDeleted, onLiked, onSorting }) => {
 
               <th>
                 <button
-                  onClick={() => onSorting("numberInStock")}
+                  onClick={() => sorting("numberInStock")}
                   className="btn btn-link text-light px-0"
                 >
                   Stock <i className="fas fa-sort-down" />
@@ -70,7 +83,7 @@ const TableMovies = ({ data, onDeleted, onLiked, onSorting }) => {
 
               <th>
                 <button
-                  onClick={() => onSorting("dailyRentalRate")}
+                  onClick={() => sorting("dailyRentalRate")}
                   className="btn btn-link text-light px-0"
                 >
                   Rate <i className="fas fa-sort-down" />
@@ -80,7 +93,7 @@ const TableMovies = ({ data, onDeleted, onLiked, onSorting }) => {
               <th />
             </tr>
           </thead>
-          <tbody className="tbody">{tr}</tbody>
+          <tbody className="tbody">{RenderColumns}</tbody>
         </table>
       )}
     </div>
