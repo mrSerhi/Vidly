@@ -12,7 +12,7 @@ const TitleMovies = ({ length }) => {
         Don't exist the movies in our database...
       </h3>
     );
-  return <div className="col-md-8 mx-auto">{title}</div>;
+  return <div className="col-md-12 mx-auto">{title}</div>;
 };
 
 export default TitleMovies;

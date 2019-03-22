@@ -1,7 +1,7 @@
 import React from "react";
 
 // components
-import Like from "../like/like";
+import Like from "../layout/like/like";
 
 const TableMovies = ({ data, onDeleted, onLiked }) => {
   const tr = data.map(movie => {

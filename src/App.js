@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import "./App.css";
+import uuid from "uuid";
 // fake API
 import { getMovies, deleteMovie } from "./services/fakeMovieService";
+import { getGenres } from "./services/fakeGenreService";
 // utils for create pagination
 import { createPagination } from "./utils/forPagination";
 
@@ -10,13 +12,16 @@ import Spinner from "./components/layout/spinner/spinner";
 import TableMovies from "./components/tableMovies/tableMovies";
 import TitleMovies from "./components/titleMovies/titleMovies";
 import Pagination from "./components/layout/pagination/pagination";
+import Sidebar from "./components/layout/sidebar";
 
 class App extends Component {
   state = {
     movies: [],
     loaded: false,
     contentPerPage: 4,
-    currentPage: 1
+    currentPage: 1,
+    genres: [],
+    selectedGenre: "AllGenres"
   };
 
   componentDidMount() {
@@ -24,7 +29,8 @@ class App extends Component {
     setTimeout(() => {
       this.setState({
         movies: JSON.parse(localStorage.getItem("movies")),
-        loaded: true
+        loaded: true,
+        genres: [{ _id: uuid, name: "AllGenres", active: true }, ...getGenres()]
       });
     }, 1000);
     // this.setState({ movies: getMovies(), loaded: true });
@@ -62,22 +68,48 @@ class App extends Component {
     this.setState({ currentPage: page });
   };
 
+  handleGenresSelect = (e, genre) => {
+    e.preventDefault();
+    this.setState({ selectedGenre: genre, currentPage: 1 });
+  };
+
+  displayMoviesOnGenres = () => {
+    const { selectedGenre: genre, movies } = this.state;
+
+    if (genre !== "AllGenres") {
+      return movies.filter(m => m.genre.name === genre);
+    }
+    return movies;
+  };
+
   displayTable = () => {
-    const { movies: content, loaded, contentPerPage, currentPage } = this.state;
-    const { length } = content;
-    const movies = createPagination(content, currentPage, contentPerPage);
+    const {
+      // movies: content,
+      loaded,
+      contentPerPage,
+      currentPage,
+      genres
+    } = this.state;
+    // const { length } = content;
+
+    const moviesOnGenre = this.displayMoviesOnGenres();
+    const movies = createPagination(moviesOnGenre, currentPage, contentPerPage);
 
     if (loaded) {
       return (
         <React.Fragment>
-          <TitleMovies length={length} />
+          <TitleMovies length={moviesOnGenre.length} />
+
+          <Sidebar genres={genres} onGenreDisplay={this.handleGenresSelect} />
+
           <TableMovies
             data={movies}
             onDeleted={this.handleDeleteClick}
             onLiked={this.handleLikedToggle}
           />
+
           <Pagination
-            itemsLength={length}
+            itemsLength={moviesOnGenre.length}
             itemsPerPage={contentPerPage}
             currentPage={currentPage}
             onChangePagination={this.handlePaginationClick}
