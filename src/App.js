@@ -76,7 +76,17 @@ class App extends Component {
   };
 
   handleSortingData = path => {
-    this.setState({ ordered: { path, order: "asc" } });
+    // 1. clone ordered state obj
+    const ordered = { ...this.state.ordered };
+    // 2. Check if path equal ordered.path for reverse sorting and change on 'desc'
+    if (ordered.path === path) {
+      ordered.order = "desc";
+    } else {
+      ordered.path = path;
+      ordered.order = "asc";
+    }
+
+    this.setState({ ordered });
   };
 
   filteringMoviesOnGenres = () => {
