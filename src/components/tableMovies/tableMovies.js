@@ -2,21 +2,17 @@ import React from "react";
 
 // components
 import Like from "../layout/like/like";
+import TableHeader from "./tableHeader";
 
 const TableMovies = ({ data, orderedItems, onDeleted, onLiked, onSorting }) => {
-  const sorting = path => {
-    // 1. clone ordered state obj from props
-    const ordered = { ...orderedItems };
-    // 2. Check if path equal ordered.path for reverse sorting and change on 'desc' or set previous
-    if (ordered.path === path) {
-      ordered.order = ordered.order === "asc" ? "desc" : "asc";
-    } else {
-      ordered.path = path;
-      ordered.order = "asc";
-    }
-    onSorting(ordered); // return ordered object
-  };
-
+  const _path = [
+    { path: "title", label: "Title" },
+    { path: "genre.name", label: "Genre" },
+    { path: "numberInStock", label: "Stock" },
+    { path: "dailyRentalRate", label: "Rate" },
+    { key: "like" },
+    { key: "delete" }
+  ];
   const RenderColumns = data.map(movie => {
     const {
       _id,
@@ -52,47 +48,11 @@ const TableMovies = ({ data, orderedItems, onDeleted, onLiked, onSorting }) => {
     <div className="col-md-10 mx-auto">
       {data.length !== 0 && (
         <table className="table table-responsive-sm table-striped">
-          <thead className="thead thead-dark ">
-            <tr>
-              <th>
-                <button
-                  onClick={() => sorting("title")}
-                  className="btn btn-link text-light"
-                >
-                  Title <i className="fas fa-sort-down" />
-                </button>
-              </th>
-
-              <th>
-                <button
-                  onClick={() => sorting("genre.name")}
-                  className="btn btn-link text-light px-0"
-                >
-                  Genre <i className="fas fa-sort-down" />
-                </button>
-              </th>
-
-              <th>
-                <button
-                  onClick={() => sorting("numberInStock")}
-                  className="btn btn-link text-light px-0"
-                >
-                  Stock <i className="fas fa-sort-down" />
-                </button>
-              </th>
-
-              <th>
-                <button
-                  onClick={() => sorting("dailyRentalRate")}
-                  className="btn btn-link text-light px-0"
-                >
-                  Rate <i className="fas fa-sort-down" />
-                </button>
-              </th>
-              <th />
-              <th />
-            </tr>
-          </thead>
+          <TableHeader
+            orderedItems={orderedItems}
+            columnsPath={_path}
+            onSorting={onSorting}
+          />
           <tbody className="tbody">{RenderColumns}</tbody>
         </table>
       )}
