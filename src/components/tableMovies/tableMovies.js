@@ -1,8 +1,8 @@
 import React from "react";
 
 // components
-import Like from "../layout/like/like";
 import TableHeader from "./tableHeader";
+import TableBody from "./tableBody";
 
 const TableMovies = ({ data, orderedItems, onDeleted, onLiked, onSorting }) => {
   const _path = [
@@ -13,36 +13,6 @@ const TableMovies = ({ data, orderedItems, onDeleted, onLiked, onSorting }) => {
     { key: "like" },
     { key: "delete" }
   ];
-  const RenderColumns = data.map(movie => {
-    const {
-      _id,
-      title,
-      genre: { name },
-      numberInStock: stock,
-      dailyRentalRate: rate,
-      liked
-    } = movie;
-
-    return (
-      <tr key={_id}>
-        <td>{title}</td>
-        <td>{name}</td>
-        <td>{stock}</td>
-        <td>{rate}</td>
-        <td>
-          <Like onLiked={() => onLiked(_id)} liked={liked} />
-        </td>
-        <td>
-          <button
-            onClick={() => onDeleted(_id)}
-            className="btn btn-danger btn-sm"
-          >
-            <i className="fas fa-trash" />
-          </button>
-        </td>
-      </tr>
-    );
-  });
 
   return (
     <div className="col-md-10 mx-auto">
@@ -53,7 +23,7 @@ const TableMovies = ({ data, orderedItems, onDeleted, onLiked, onSorting }) => {
             columnsPath={_path}
             onSorting={onSorting}
           />
-          <tbody className="tbody">{RenderColumns}</tbody>
+          <TableBody data={data} onDeleted={onDeleted} onLiked={onLiked} />
         </table>
       )}
     </div>
