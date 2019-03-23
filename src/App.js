@@ -14,6 +14,7 @@ import TableMovies from "./components/tableMovies/tableMovies";
 import TitleMovies from "./components/titleMovies/titleMovies";
 import Pagination from "./components/layout/pagination/pagination";
 import Sidebar from "./components/layout/sidebar";
+import NavBar from "./components/layout/navBar/navBar";
 
 class App extends Component {
   state = {
@@ -142,9 +143,13 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="row">{this.renderContent()}</div>
-      </div>
+      <React.Fragment>
+        <NavBar />
+
+        <div className="container">
+          <div className="row">{this.renderContent()}</div>
+        </div>
+      </React.Fragment>
     );
   }
 }
