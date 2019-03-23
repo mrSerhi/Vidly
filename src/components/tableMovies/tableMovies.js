@@ -1,8 +1,7 @@
 import React from "react";
 
 // components
-import TableHeader from "./tableHeader";
-import TableBody from "./tableBody";
+import Table from "./table";
 
 const TableMovies = ({ data, orderedItems, onDeleted, onLiked, onSorting }) => {
   const _path = [
@@ -17,14 +16,14 @@ const TableMovies = ({ data, orderedItems, onDeleted, onLiked, onSorting }) => {
   return (
     <div className="col-md-10 mx-auto">
       {data.length !== 0 && (
-        <table className="table table-responsive-sm table-striped">
-          <TableHeader
-            orderedItems={orderedItems}
-            columnsPath={_path}
-            onSorting={onSorting}
-          />
-          <TableBody data={data} onDeleted={onDeleted} onLiked={onLiked} />
-        </table>
+        <Table
+          data={data}
+          orderedItems={orderedItems}
+          path={_path}
+          onLiked={onLiked}
+          onDeleted={onDeleted}
+          onSorting={onSorting}
+        />
       )}
     </div>
   );
