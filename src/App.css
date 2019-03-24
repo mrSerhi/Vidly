@@ -3,6 +3,18 @@ body {
   background-color: #dfdfdf;
 }
 
+.navbar .navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #5744ff;
+  letter-spacing: 0.3rem;
+  transition: color 0.3s linear;
+}
+
+.navbar .navbar-brand:hover {
+  color: #6b5bfa;
+}
+
 .table td,
 .table th {
   vertical-align: middle;

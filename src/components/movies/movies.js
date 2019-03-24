@@ -13,7 +13,6 @@ import TableMovies from "../tableMovies/tableMovies";
 import TitleMovies from "../titleMovies/titleMovies";
 import Pagination from "../layout/pagination/pagination";
 import Sidebar from "../layout/sidebar";
-import NavBar from "../layout/navBar/navBar";
 
 class Movies extends Component {
   state = {
@@ -141,15 +140,7 @@ class Movies extends Component {
   };
 
   render() {
-    return (
-      <React.Fragment>
-        <NavBar />
-
-        <div className="container">
-          <div className="row">{this.renderContent()}</div>
-        </div>
-      </React.Fragment>
-    );
+    return <div className="row">{this.renderContent()}</div>;
   }
 }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 // components
 import Like from "../layout/like/like";
 
@@ -16,7 +17,11 @@ const TableBody = ({ data, onDeleted, onLiked }) => {
 
     return (
       <tr key={_id}>
-        <td>{title}</td>
+        <td>
+          <Link to={`/movie/${_id}`} className="btn btn-link">
+            {title}
+          </Link>
+        </td>
         <td>{name}</td>
         <td>{stock}</td>
         <td>{rate}</td>
