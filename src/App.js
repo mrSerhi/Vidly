@@ -14,6 +14,7 @@ import Rentals from "./components/layout/pages/rentals/rentals";
 import MovieForm from "./components/layout/pages/movie/movieForm";
 import NotFound from "./components/layout/pages/notFound/notFound";
 import NavBar from "./components/layout/navBar/navBar";
+import LoginForm from "./components/layout/pages/login/loginForm";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
       <NavBar />
       <div className="container">
         <Switch>
+          <Route path="/login" component={LoginForm} />
           <Route exact path="/movies" component={Movies} />
           <Route path="/customers" component={Customers} />
           <Route path="/rentals" component={Rentals} />
