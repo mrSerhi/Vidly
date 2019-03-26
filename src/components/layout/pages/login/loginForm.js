@@ -9,9 +9,13 @@ class LoginForm extends Component {
     errors: {}
   };
 
-  // obj with rules for Joi validation
+  // obj with main rules for Joi validation
   schema = {
-    name: Joi.string().required(),
+    name: Joi.string()
+      .alphanum()
+      .min(3)
+      .max(30)
+      .required(),
     email: Joi.string().email({ minDomainAtoms: 2 })
   };
 
@@ -32,20 +36,24 @@ class LoginForm extends Component {
     return errors;
   };
 
-  validationInputValue = (name, value) => {
-    if (name === "name") {
-      if (value.trim().length < 3) return "Name must be bigger then 3";
-    }
-    if (name === "email") {
-      if (value.trim().includes("-")) return "Type email without * - *";
-    }
+  validationOnChange = (name, value) => {
+    // create obj for each input use name property
+    const inputVal = { [name]: value };
+    // create the local schema object with main rules valid for each name input
+    const schema = {
+      [name]: this.schema[name]
+    };
+    // not uses options object because we needs aborting on first finded error
+    const { error } = Joi.validate(inputVal, schema);
+
+    return error ? error.details[0].message : null;
   };
 
   handleChange = ({ target: { name, value } }) => {
     // copy of errors state
     const errors = { ...this.state.errors };
     // valid values on change and save error message
-    const inValidMessage = this.validationInputValue(name, value);
+    const inValidMessage = this.validationOnChange(name, value);
     // checking on error message
     if (inValidMessage) {
       errors[name] = inValidMessage;
