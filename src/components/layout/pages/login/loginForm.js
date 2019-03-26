@@ -8,7 +8,7 @@ class LoginForm extends Component {
     errors: {}
   };
 
-  validation = () => {
+  validationOnSubmit = () => {
     const { name, email } = this.state;
     let errors = {};
 
@@ -25,13 +25,35 @@ class LoginForm extends Component {
     return Object.keys(errors).length === 0 ? null : errors;
   };
 
-  handleChange = e => this.setState({ [e.target.name]: e.target.value });
+  validationInputValue = (name, value) => {
+    if (name === "name") {
+      if (value.trim().length < 3) return "Name must be bigger then 3";
+    }
+    if (name === "email") {
+      if (value.trim().includes("-")) return "Type email without * - *";
+    }
+  };
+
+  handleChange = ({ target: { name, value } }) => {
+    // copy of errors state
+    const errors = { ...this.state.errors };
+    // valid values on change and save error message
+    const inValidMessage = this.validationInputValue(name, value);
+    // checking on error message
+    if (inValidMessage) {
+      errors[name] = inValidMessage;
+    } else {
+      delete errors[name];
+    }
+
+    this.setState({ [name]: value, errors });
+  };
 
   handleSubmitForm = e => {
     e.preventDefault();
 
     // some validation
-    const inValid = this.validation();
+    const inValid = this.validationOnSubmit();
     // set errors
     this.setState({ errors: inValid });
     if (inValid) return;
@@ -62,6 +84,8 @@ class LoginForm extends Component {
                   value={name}
                   onChange={this.handleChange}
                   error={nameMessage}
+                  placeholder="Enter your name"
+                  required={true}
                 />
 
                 <FormGroup
@@ -70,6 +94,8 @@ class LoginForm extends Component {
                   value={email}
                   onChange={this.handleChange}
                   error={emailMessage}
+                  placeholder="Enter your email"
+                  required={true}
                   type="email"
                 />
 
