@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Joi from "joi-browser";
 import FormGroup from "./formGroup";
 
 class LoginForm extends Component {
@@ -8,21 +9,27 @@ class LoginForm extends Component {
     errors: {}
   };
 
+  // obj with rules for Joi validation
+  schema = {
+    name: Joi.string().required(),
+    email: Joi.string().email({ minDomainAtoms: 2 })
+  };
+
   validationOnSubmit = () => {
     const { name, email } = this.state;
+    // abortEarly === false - is prevent aborting on first finded error and stoped
+    const options = { abortEarly: false };
+    // get error obj from returns Joi validation responce
+    const { error } = Joi.validate({ name, email }, this.schema, options);
+
+    if (!error) return null;
+
     let errors = {};
+    // should looping error.details array and set error message on current field name
+    // path = current field name (array) -> message = error message (string)
+    error.details.forEach(item => (errors[item.path[0]] = item.message));
 
-    if (name.trim() === "") {
-      errors.name = "Please, type your name...";
-    } else if (!isNaN(name)) {
-      errors.name = "Name isn't a string! Please, retry... ";
-    }
-
-    if (email.trim() === "") {
-      errors.email = "Please, type your email address...";
-    }
-
-    return Object.keys(errors).length === 0 ? null : errors;
+    return errors;
   };
 
   validationInputValue = (name, value) => {
@@ -54,11 +61,13 @@ class LoginForm extends Component {
 
     // some validation
     const inValid = this.validationOnSubmit();
-    // set errors
-    this.setState({ errors: inValid });
+    // in the component value must not be a null or undefined!!!
+    // For this case we should to replace returns *null* on ampty object
+    this.setState({ errors: inValid || {} });
     if (inValid) return;
 
     alert("Login");
+
     // clear fields
     this.setState({ name: "", email: "" });
   };
@@ -69,6 +78,7 @@ class LoginForm extends Component {
       email,
       errors: { name: nameMessage, email: emailMessage }
     } = this.state;
+
     return (
       <div className="container">
         <div className="col-sm-6 mx-auto">
@@ -83,7 +93,7 @@ class LoginForm extends Component {
                   name="name"
                   value={name}
                   onChange={this.handleChange}
-                  error={nameMessage}
+                  error={nameMessage} // should not be a null or undefined
                   placeholder="Enter your name"
                   required={true}
                 />
