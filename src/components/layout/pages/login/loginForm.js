@@ -86,6 +86,7 @@ class LoginForm extends Component {
       email,
       errors: { name: nameMessage, email: emailMessage }
     } = this.state;
+    const allowSubmiting = this.validationOnSubmit(); // return null or object with errors
 
     return (
       <div className="container">
@@ -117,7 +118,12 @@ class LoginForm extends Component {
                   type="email"
                 />
 
-                <input className="btn btn-info" type="submit" value="Login" />
+                <input
+                  className="btn btn-info"
+                  type="submit"
+                  value="Login"
+                  disabled={allowSubmiting}
+                />
               </form>
             </div>
           </div>
