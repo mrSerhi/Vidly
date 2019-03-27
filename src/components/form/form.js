@@ -41,7 +41,9 @@ class Form extends Component {
     this.workWithData();
 
     // clear fields
-    this.setState({ data: { name: "", email: "" } });
+    const data = { ...this.state.data };
+    for (const key in data) data[key] = "";
+    this.setState({ data });
   };
 
   validationOnChange = (name, value) => {
@@ -75,28 +77,31 @@ class Form extends Component {
   };
 
   // helpfull render fn-s
-  renderInput = (name, label, required) => {
+  renderInput = (name, label, required = false, type = "text") => {
     const { data, errors } = this.state;
 
     return (
       <FormGroup
         label={label}
-        name={data[name]}
+        name={name}
         value={data[name]}
         onChange={this.handleChange}
         error={errors[name]} // should not be a null or undefined
         placeholder={`Enter your ${label}`}
         required={required}
+        type={type}
       />
     );
   };
 
   renderSubmit = (label, className = "btn-info") => {
     const allowSubmiting = this.validationOnSubmit(); // return null or object with errors
-
+    const onDesablesChange = allowSubmiting
+      ? "btn btn-secondary"
+      : "btn " + className;
     return (
       <input
-        className={`btn ${className}`}
+        className={onDesablesChange}
         type="submit"
         value={label}
         disabled={allowSubmiting}

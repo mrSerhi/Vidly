@@ -31,7 +31,7 @@ class LoginForm extends Form {
       <div className="container">
         <div className="col-sm-6 mx-auto">
           <div className="card">
-            <h4 className="card-header bg-dark text-white">
+            <h4 className="card-header bg-info text-white">
               <i className="fas fa-unlock" /> Login
             </h4>
             <div className="card-body">

@@ -9,7 +9,7 @@ const FormGroup = ({
   error,
   placeholder,
   required,
-  type = "text"
+  type
 }) => {
   const errorMessage = <div className="invalid-feedback">{error}</div>;
   const inputValidClases = error ? "form-control is-invalid" : "form-control";
