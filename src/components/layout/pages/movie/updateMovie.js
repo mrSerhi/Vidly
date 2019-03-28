@@ -1,16 +1,18 @@
 import React from "react";
-// fake API
-import { saveMovie } from "../../services/fakeMovieService";
-import { getGenres } from "../../services/fakeGenreService";
+import BackLink from "../../backWay/backLink";
+import { Redirect } from "react-router-dom";
 
-// for validation rules
+// for validate
 import Joi from "joi-browser";
 
-// components
-import Form from "../form/form";
-import BackLink from "../layout/backWay/backLink";
+// fake API
+import { getMovie, saveMovie } from "../../../../services/fakeMovieService";
+import { getGenres } from "../../../../services/fakeGenreService";
 
-class AddMovie extends Form {
+// components
+import Form from "../../../form/form";
+
+class UpdateMovie extends Form {
   state = {
     data: {
       title: "",
@@ -35,29 +37,49 @@ class AddMovie extends Form {
       .max(10)
       .label("Rate")
   };
-  // emulate POST request to the server and save the new movie to database
+  // emulate UPDATE request to the server
   workWithData = () => {
-    const { data } = this.state;
+    const { selectMovieID, data } = this.state;
     const { genre, ...movie } = data;
+    movie._id = selectMovieID;
     movie.genre = getGenres().filter(g => g._id === genre)[0]; // return first object from array
     saveMovie(movie);
   };
 
+  componentDidMount() {
+    const currMovieID = this.props.match.params.id;
+    // get current movie
+    const { _id, title, genre, numberInStock, dailyRentalRate } = getMovie(
+      currMovieID
+    );
+    const data = { ...this.state.data };
+    data.title = title;
+    data.genre = genre._id;
+    data.stock = numberInStock;
+    data.rate = dailyRentalRate;
+
+    this.setState({
+      data,
+      selectMovieID: _id
+    });
+  }
+
   render() {
     const genres = getGenres();
+
     return (
       <React.Fragment>
         <BackLink />
         <div className="col-md-6 mx-auto">
-          <div className="card bg-dark text-light border-light">
-            <h5 className="card-header bg-info">Add Movie</h5>
+          <div className="card bg-dark text-light border-danger">
+            <h5 className="card-header bg-danger">Update Movie</h5>
             <div className="card-body">
               <form onSubmit={this.handleSubmitForm} className="form">
                 {this.renderInput("title", "Title", true)}
                 {this.renderCustomSelectMenu("genre", genres, "Genre")}
                 {this.renderInput("stock", "Number in stock", true)}
                 {this.renderInput("rate", "Rate", true)}
-                {this.renderSubmit("Add", "btn-info")}
+                {this.renderSubmit("Update...", "btn-warning")}
               </form>
             </div>
           </div>
@@ -67,4 +89,4 @@ class AddMovie extends Form {
   }
 }
 
-export default AddMovie;
+export default UpdateMovie;

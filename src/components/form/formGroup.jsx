@@ -36,7 +36,7 @@ const FormGroup = ({
 FormGroup.propTypes = {
   label: PropTypes.string,
   name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onChange: PropTypes.func.isRequired,
   error: PropTypes.string,
   placeholder: PropTypes.string,

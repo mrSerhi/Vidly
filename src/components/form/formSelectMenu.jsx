@@ -1,11 +1,11 @@
 import React from "react";
 
-const FormSelectMenu = ({ name, genres, onChange, label }) => {
-  const renderGenres = genres.map(genre => {
-    const { _id, name } = genre;
+const FormSelectMenu = ({ name, content, onChange, label }) => {
+  const renderGenres = content.map(item => {
+    // const { _id, name } = genre;
     return (
-      <option key={_id} value={_id}>
-        {name}
+      <option key={item._id} value={item._id}>
+        {item.name}
       </option>
     );
   });
@@ -17,10 +17,11 @@ const FormSelectMenu = ({ name, genres, onChange, label }) => {
         id={name}
         onChange={onChange}
         className="custom-select"
+        // value={content.filter(item => item._id === value._id)}
       >
-        <option defaultValue> {""} </option>
+        <option> {""} </option>
 
-        {genres.length > 0 && renderGenres}
+        {content.length > 0 && renderGenres}
       </select>
     </div>
   );

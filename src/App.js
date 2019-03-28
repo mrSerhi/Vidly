@@ -11,7 +11,7 @@ import "./App.css";
 import Movies from "./components/movies/movies";
 import Customers from "./components/layout/pages/customers/customers";
 import Rentals from "./components/layout/pages/rentals/rentals";
-import MovieForm from "./components/layout/pages/movie/movieForm";
+import UpdateMovie from "./components/layout/pages/movie/updateMovie";
 import NotFound from "./components/layout/pages/notFound/notFound";
 import NavBar from "./components/layout/navBar/navBar";
 import LoginForm from "./components/layout/pages/login/loginForm";
@@ -30,7 +30,7 @@ const App = () => {
           <Route path="/movie/add" component={AddMovie} />
           <Route path="/customers" component={Customers} />
           <Route path="/rentals" component={Rentals} />
-          <Route path="/movie/:id" component={MovieForm} />
+          <Route path="/movie/:id" component={UpdateMovie} />
           <Redirect exact from="/" to="/movies" />
           <Route component={NotFound} />
         </Switch>
