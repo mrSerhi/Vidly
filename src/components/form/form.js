@@ -3,6 +3,7 @@ import Joi from "joi-browser";
 
 // components
 import FormGroup from "./formGroup";
+import FormSelectMenu from "./formSelectMenu";
 
 class Form extends Component {
   state = {
@@ -96,29 +97,14 @@ class Form extends Component {
     );
   };
 
-  renderCustomSelectMenu = (name, genres = [], label) => {
-    const renderGenres = genres.map(genre => {
-      const { _id, name } = genre;
-      return (
-        <option key={_id} value={_id}>
-          {name}
-        </option>
-      );
-    });
+  renderCustomSelectMenu = (name, genres = [], label = "") => {
     return (
-      <div className="form-group">
-        <label htmlFor={name}>{label}</label>
-        <select
-          name={name}
-          id={name}
-          onChange={this.handleChange}
-          className="custom-select"
-        >
-          <option defaultValue> {""} </option>
-
-          {genres.length > 0 && renderGenres}
-        </select>
-      </div>
+      <FormSelectMenu
+        onChange={this.handleChange}
+        name={name}
+        genres={genres}
+        label={label}
+      />
     );
   };
 
