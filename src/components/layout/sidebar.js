@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 const Sidebar = ({ genres, selectedItem, onGenreDisplay }) => {
   const renderGenres = genres.map(g => {
@@ -18,10 +19,14 @@ const Sidebar = ({ genres, selectedItem, onGenreDisplay }) => {
       </a>
     );
   });
-
+  // d-flex flex-row justify-content-between align-items-center mb-1 mx-auto
   return (
-    <div className="col-md-6 mx-auto mb-2">
+    <div className="col-md-10 sidebar">
       <ul className="list-group list-group-horizontal">{renderGenres}</ul>
+
+      <Link to="/movie/add" className="btn btn-outline-primary">
+        Add Movie
+      </Link>
     </div>
   );
 };

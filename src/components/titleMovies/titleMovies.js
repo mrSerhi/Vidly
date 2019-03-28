@@ -3,7 +3,7 @@ import React from "react";
 const TitleMovies = ({ length }) => {
   const title =
     length > 0 ? (
-      <h3 className="text-center">
+      <h3 className="title-movies text-center">
         In the Database we are haves{" "}
         <span className="badge badge-success">{length}</span> movies
       </h3>

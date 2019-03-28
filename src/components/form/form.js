@@ -33,7 +33,7 @@ class Form extends Component {
     // some validation
     const inValid = this.validationOnSubmit();
     // in the component value must not be a null or undefined!!!
-    // For this case we should to replace returns *null* on ampty object
+    // For this case we should to replace returns *null* on empty object
     this.setState({ errors: inValid || {} });
     if (inValid) return;
 
@@ -44,6 +44,8 @@ class Form extends Component {
     const data = { ...this.state.data };
     for (const key in data) data[key] = "";
     this.setState({ data });
+
+    this.props.history.push("/movies");
   };
 
   validationOnChange = (name, value) => {
@@ -91,6 +93,32 @@ class Form extends Component {
         required={required}
         type={type}
       />
+    );
+  };
+
+  renderCustomSelectMenu = (name, genres = [], label) => {
+    const renderGenres = genres.map(genre => {
+      const { _id, name } = genre;
+      return (
+        <option key={_id} value={_id}>
+          {name}
+        </option>
+      );
+    });
+    return (
+      <div className="form-group">
+        <label htmlFor={name}>{label}</label>
+        <select
+          name={name}
+          id={name}
+          onChange={this.handleChange}
+          className="custom-select"
+        >
+          <option defaultValue> {""} </option>
+
+          {genres.length > 0 && renderGenres}
+        </select>
+      </div>
     );
   };
 

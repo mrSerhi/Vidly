@@ -15,7 +15,49 @@ body {
   color: #6b5bfa;
 }
 
+/* sidebar */
+.sidebar {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin: 1rem auto;
+}
+.sidebar > a {
+  margin-left: auto;
+}
+
 .table td,
 .table th {
   vertical-align: middle;
+}
+
+@media screen and (max-width: 480px) {
+  /* navbar-links */
+  .navbar .navbar-nav .nav-link {
+    text-align: center;
+  }
+  /* display length of movies */
+  .title-movies {
+    font-size: 1.4rem;
+  }
+  /* sidebar */
+  .list-group > .list-group-item {
+    padding: 0.4rem;
+  }
+
+  .sidebar {
+    display: flex;
+    flex-flow: column nowrap;
+    margin: 1rem 0;
+  }
+  .sidebar > a {
+    margin: 1rem 0 0;
+    align-self: center;
+  }
+}
+
+@media screen and (max-width: 720px) {
+  /* .list-group > .list-group-item {
+    padding: 0.2rem;
+  } */
 }

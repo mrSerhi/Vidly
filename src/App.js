@@ -16,6 +16,7 @@ import NotFound from "./components/layout/pages/notFound/notFound";
 import NavBar from "./components/layout/navBar/navBar";
 import LoginForm from "./components/layout/pages/login/loginForm";
 import Register from "./components/layout/pages/register/register";
+import AddMovie from "./components/addMovie/addMovie";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/register" component={Register} />
           <Route path="/login" component={LoginForm} />
           <Route exact path="/movies" component={Movies} />
+          <Route path="/movie/add" component={AddMovie} />
           <Route path="/customers" component={Customers} />
           <Route path="/rentals" component={Rentals} />
           <Route path="/movie/:id" component={MovieForm} />
