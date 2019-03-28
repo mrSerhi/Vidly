@@ -8,6 +8,7 @@ import Joi from "joi-browser";
 
 // components
 import Form from "../form/form";
+import BackLink from "../layout/backWay/backLink";
 
 class AddMovie extends Form {
   state = {
@@ -40,15 +41,23 @@ class AddMovie extends Form {
   render() {
     const genres = getGenres();
     return (
-      <div className="col-sm-6 mx-auto">
-        <form onSubmit={this.handleSubmitForm} className="form">
-          {this.renderInput("title", "Title", true)}
-          {this.renderCustomSelectMenu("genre", genres, "Genre")}
-          {this.renderInput("stock", "Number in stock", true)}
-          {this.renderInput("rate", "Rate", true)}
-          {this.renderSubmit("Add", "btn-dark")}
-        </form>
-      </div>
+      <React.Fragment>
+        <BackLink />
+        <div className="col-md-6 mx-auto">
+          <div className="card bg-dark text-light border-light">
+            <h5 className="card-header bg-info">Add Movie</h5>
+            <div className="card-body">
+              <form onSubmit={this.handleSubmitForm} className="form">
+                {this.renderInput("title", "Title", true)}
+                {this.renderCustomSelectMenu("genre", genres, "Genre")}
+                {this.renderInput("stock", "Number in stock", true)}
+                {this.renderInput("rate", "Rate", true)}
+                {this.renderSubmit("Add", "btn-info")}
+              </form>
+            </div>
+          </div>
+        </div>
+      </React.Fragment>
     );
   }
 }
