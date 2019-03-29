@@ -13,6 +13,7 @@ import TableMovies from "../tableMovies/tableMovies";
 import TitleMovies from "../titleMovies/titleMovies";
 import Pagination from "../layout/pagination/pagination";
 import Sidebar from "../layout/sidebar";
+import Search from "../search/search";
 
 class Movies extends Component {
   state = {
@@ -22,7 +23,8 @@ class Movies extends Component {
     currentPage: 1,
     genres: [],
     selectedGenre: "AllGenres",
-    ordered: { path: "title", order: "asc" }
+    ordered: { path: "title", order: "asc" },
+    searchQuery: ""
   };
 
   componentDidMount() {
@@ -31,7 +33,7 @@ class Movies extends Component {
       this.setState({
         movies: JSON.parse(localStorage.getItem("movies")),
         loaded: true,
-        genres: [{ _id: uuid, name: "AllGenres", active: true }, ...getGenres()]
+        genres: [{ _id: uuid, name: "AllGenres" }, ...getGenres()]
       });
     }, 1000);
     // this.setState({ movies: getMovies(), loaded: true });
@@ -71,20 +73,28 @@ class Movies extends Component {
 
   handleGenresSelect = (e, genre) => {
     e.preventDefault();
-    this.setState({ selectedGenre: genre, currentPage: 1 });
+    this.setState({ selectedGenre: genre, currentPage: 1, searchQuery: "" });
   };
 
   handleSortingData = ordered => {
     this.setState({ ordered });
   };
 
-  filteringMoviesOnGenres = () => {
-    const { selectedGenre: genre, movies } = this.state;
+  handleSearching = searchQuery => this.setState({ searchQuery });
+
+  filteringMovies = () => {
+    const { selectedGenre: genre, movies, searchQuery } = this.state;
+
+    // find movies
+    const findedMovies = movies.filter(m =>
+      m.title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     if (genre !== "AllGenres") {
-      return movies.filter(m => m.genre.name === genre);
+      return findedMovies.filter(m => m.genre.name === genre);
     }
-    return movies;
+    // return movies;
+    return findedMovies;
   };
 
   renderContent = () => {
@@ -98,9 +108,9 @@ class Movies extends Component {
     } = this.state;
 
     // filtering by genre
-    const moviesOnGenre = this.filteringMoviesOnGenres();
+    const filteredContent = this.filteringMovies();
     // sorting by order
-    const sortingMoviesByOrder = _.orderBy(moviesOnGenre, [path], [order]);
+    const sortingMoviesByOrder = _.orderBy(filteredContent, [path], [order]);
     // pagination
     const movies = createPagination(
       sortingMoviesByOrder,
@@ -111,7 +121,12 @@ class Movies extends Component {
     if (loaded) {
       return (
         <React.Fragment>
-          <TitleMovies length={moviesOnGenre.length} />
+          <TitleMovies length={filteredContent.length} />
+
+          <Search
+            onSearch={this.handleSearching}
+            initQuery={this.state.searchQuery}
+          />
 
           <Sidebar
             genres={genres}
@@ -128,7 +143,7 @@ class Movies extends Component {
           />
 
           <Pagination
-            itemsLength={moviesOnGenre.length}
+            itemsLength={filteredContent.length}
             itemsPerPage={contentPerPage}
             currentPage={currentPage}
             onChangePagination={this.handlePaginationClick}
