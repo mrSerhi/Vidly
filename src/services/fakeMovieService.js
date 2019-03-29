@@ -99,7 +99,7 @@ export function saveMovie(movie) {
   movieInDb.dailyRentalRate = movie.rate;
 
   if (!movieInDb._id) {
-    movieInDb._id = Date.now();
+    movieInDb._id = Date.now().toString();
     movies.push(movieInDb);
   }
 

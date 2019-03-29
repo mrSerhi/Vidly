@@ -1,6 +1,5 @@
 import React from "react";
 import BackLink from "../../backWay/backLink";
-import { Redirect } from "react-router-dom";
 
 // for validate
 import Joi from "joi-browser";
@@ -20,10 +19,12 @@ class UpdateMovie extends Form {
       stock: "",
       rate: ""
     },
+    genres: [],
     errors: {}
   };
 
   schema = {
+    _id: Joi.string(),
     title: Joi.string()
       .required()
       .label("Title"),
@@ -38,21 +39,31 @@ class UpdateMovie extends Form {
       .label("Rate")
   };
   // emulate UPDATE request to the server
+  // workWithData = () => {
+  //   const { selectMovieID, data } = this.state;
+  //   const { genre, ...movie } = data;
+  //   movie._id = selectMovieID;
+  //   movie.genre = getGenres().filter(g => g._id === genre)[0]; // return first object from array
+  //   saveMovie(movie);
+  // };
+
   workWithData = () => {
-    const { selectMovieID, data } = this.state;
-    const { genre, ...movie } = data;
-    movie._id = selectMovieID;
-    movie.genre = getGenres().filter(g => g._id === genre)[0]; // return first object from array
+    const { data: movie, genres } = this.state;
+    movie.genre = genres.filter(g => g._id === movie.genre)[0];
     saveMovie(movie);
   };
 
   componentDidMount() {
-    const currMovieID = this.props.match.params.id;
+    const { match, history } = this.props;
+    const currMovieID = match.params.id;
     // get current movie
-    const { _id, title, genre, numberInStock, dailyRentalRate } = getMovie(
-      currMovieID
-    );
+    const movie = getMovie(currMovieID);
+    if (!movie) return history.replace("/not_found");
+
+    const { _id, title, genre, numberInStock, dailyRentalRate } = movie;
     const data = { ...this.state.data };
+
+    data._id = _id;
     data.title = title;
     data.genre = genre._id;
     data.stock = numberInStock;
@@ -60,12 +71,13 @@ class UpdateMovie extends Form {
 
     this.setState({
       data,
-      selectMovieID: _id
+      // selectMovieID: _id,
+      genres: getGenres()
     });
   }
 
   render() {
-    const genres = getGenres();
+    const { genres } = this.state;
 
     return (
       <React.Fragment>

@@ -18,6 +18,7 @@ class AddMovie extends Form {
       stock: "",
       rate: ""
     },
+    genres: [],
     errors: {}
   };
 
@@ -37,14 +38,18 @@ class AddMovie extends Form {
   };
   // emulate POST request to the server and save the new movie to database
   workWithData = () => {
-    const { data } = this.state;
+    const { data, genres } = this.state;
     const { genre, ...movie } = data;
-    movie.genre = getGenres().filter(g => g._id === genre)[0]; // return first object from array
+    movie.genre = genres.filter(g => g._id === genre)[0]; // return first object from array
     saveMovie(movie);
   };
 
+  componentDidMount() {
+    this.setState({ genres: getGenres() });
+  }
+
   render() {
-    const genres = getGenres();
+    const { genres } = this.state;
     return (
       <React.Fragment>
         <BackLink />

@@ -97,15 +97,16 @@ class Form extends Component {
     );
   };
 
-  renderCustomSelectMenu = (name, content = [], label = "") => {
-    // const { data } = this.state;
+  renderCustomSelectMenu = (name, options = [], label = "") => {
+    const { data } = this.state;
     return (
       <FormSelectMenu
         onChange={this.handleChange}
         name={name}
-        content={content}
+        options={options}
         label={label}
-        // value={data[name]}
+        value={data[name]}
+        // errors={errors[name]}
       />
     );
   };
