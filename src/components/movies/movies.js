@@ -36,7 +36,6 @@ class Movies extends Component {
         genres: [{ _id: uuid, name: "AllGenres" }, ...getGenres()]
       });
     }, 1000);
-    // this.setState({ movies: getMovies(), loaded: true });
   }
 
   componentDidUpdate() {

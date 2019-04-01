@@ -33,7 +33,8 @@ const Sidebar = ({ genres, selectedItem, onGenreDisplay }) => {
 
 Sidebar.propTypes = {
   genres: PropTypes.array.isRequired,
-  onGenreDisplay: PropTypes.func.isRequired
+  onGenreDisplay: PropTypes.func.isRequired,
+  selectedItem: PropTypes.string
 };
 
 export default Sidebar;
